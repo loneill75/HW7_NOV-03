@@ -1,0 +1,49 @@
+---
+title: "HW Lab 6"
+output: 
+date: "2022-11-03"
+group: Zack, Victoria, Liam
+---
+
+```{r}
+load("Household_Pulse_data_w48.RData")
+attach(Household_Pulse_data)
+summary(Household_Pulse_data)
+```
+
+
+
+```{r}
+model_logit1 <- glm(RECVDVACC ~ EEDUC, family = binomial, data = Household_Pulse_data)
+
+
+Household_Pulse_data$vaxx <- (Household_Pulse_data$RECVDVACC == "yes got vaxx")
+is.na(Household_Pulse_data$vaxx) <- which(Household_Pulse_data$RECVDVACC == "NA") 
+
+table(Household_Pulse_data$vaxx,Household_Pulse_data$EEDUC)
+
+```
+
+
+~~~
+Changed the year around from 2000 and ran a few times.
+~~~
+```{r}
+pick_use1 <- (Household_Pulse_data$TBIRTH_YEAR > 1980)
+dat_use1 <- subset(Household_Pulse_data, pick_use1)
+
+dat_use1$RECVDVACC <- droplevels(dat_use1$RECVDVACC) 
+
+model_logit1 <- glm(vaxx ~ TBIRTH_YEAR + EEDUC + GENID_DESCRIBE, family = binomial, data = dat_use1)
+summary(model_logit1)
+```
+
+```{r}
+pick_use2 <- (Household_Pulse_data$TBIRTH_YEAR > 1950)
+dat_use1 <- subset(Household_Pulse_data, pick_use1)
+
+dat_use1$RECVDVACC <- droplevels(dat_use1$RECVDVACC) 
+
+model_logit1 <- glm(vaxx ~ TBIRTH_YEAR + EEDUC + GENID_DESCRIBE, family = binomial, data = dat_use1)
+summary(model_logit1)
+```
